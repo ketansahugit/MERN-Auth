@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState } from "react";
+import axios from 'axios';
 
 export default function Login() {
 
@@ -8,7 +9,8 @@ export default function Login() {
   })
     
     const loginUser = (exp) => {
-        exp.preventDefault()
+        e.preventDefault();
+        axios.get('/')
     }
   return (
     <div>
