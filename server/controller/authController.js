@@ -1,9 +1,12 @@
 const User = require('../models/user');
+const { hashPassword, comparePassword } = require('../helpers/auth');
+const jwt = require('jsonwebtoken');
 
 const test = (res, req) => {
     res.join('test is working')
 }
 
+// Register Endpoint
 const registerUser = async (req, res) => {
     try {
         const {name, email, password} = req.body;
@@ -26,9 +29,13 @@ const registerUser = async (req, res) => {
                 error: 'Email is taken already'
             })
         }
-        
+
+        const hashedPassword = await hashPassword(password)
+        // Create User in database
         const user = await User.create({
-            name, email, password
+            name, 
+            email, 
+            password: hashedPassword,
         })
         return res.json(user)
     } catch(error) {
@@ -36,4 +43,35 @@ const registerUser = async (req, res) => {
     }
 }
 
-module.exports = { test, registerUser }
+// Login Endpoint
+const loginUser = async (req, res) => {
+    try {
+        const {email, password} = req.body;
+
+        // Check if user exists
+        const user = await User.findOne({email});
+        if (!user) {
+            return res.json({
+                error: 'No user found'
+            })
+        }
+
+        // Check if passwords match
+        const match = await comparePassword(password,  user.password)
+        if (match) {
+            jwt.sign({email: user.email, id: user._id, name: user.name}, process.env.JWT_SECRET, {}, (err, token) => {
+                if (err) throw err;
+                res.cookie('token', token).json(user)
+            })
+        }
+        if (!match) {
+            res.json({
+                error: "Password do not match"
+            })
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+module.exports = { test, registerUser, loginUser }
