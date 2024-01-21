@@ -21,8 +21,9 @@ export default function Login() {
       if (data.error) {
         toast.error(data.error)
       } else {
+        setUser(data);
         setData({});
-        navigate('/')
+        navigate('/dashboard')
       }
     } catch (error) {
 
@@ -31,7 +32,7 @@ export default function Login() {
   return (
     <div>
         <form onSubmit={loginUser}>
-            <lable>Email</lable>
+            <label>Email</label>
             <input type='email' placeholder='Enter email' value={data.email} onChange={(e) => setData({...data, email: e.target.value})}/>
             
             <label>Password</label>

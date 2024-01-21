@@ -13,8 +13,12 @@ export function UserContextProvider({children}) {
             })
         }
     }, [])
+
+    const loginUser = (userData) => {
+        setUser(userData);
+    };
     return (
-        <UserContext.Provider value={user, setUser}>
+        <UserContext.Provider value={{user, setUser: loginUser}}>
             {children}
         </UserContext.Provider>
     )

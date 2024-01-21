@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Toast } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 export default function Register() {
@@ -42,7 +42,7 @@ export default function Register() {
             <label>Password</label>
             <input type='password' placeholder='Enter Password' value={data.password} onChange={(e) => setData({...data, password: e.target.value})}/>
 
-            <submit type='submit'>Submit</submit>
+            <button type='submit'>Submit</button>
         </form>
     </div>
   )
